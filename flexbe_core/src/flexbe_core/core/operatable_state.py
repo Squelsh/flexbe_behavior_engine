@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import rospy
 
-from flexbe_core.core.preemptable_state import PreemptableState
+from flexbe_core.core.semantic_properties_state import SemanticPropertiesState
 from flexbe_core.core.operatable_state_machine import OperatableStateMachine
 
 from flexbe_core.proxy import ProxyPublisher, ProxySubscriberCached
@@ -11,7 +11,7 @@ from std_msgs.msg import UInt8, String
 from flexbe_core.state_logger import StateLogger
 
 
-class OperatableState(PreemptableState):
+class OperatableState(SemanticPropertiesState):
     """
     A state that supports autonomy levels and silent mode.
     Also, it allows being tracked by a GUI or anything else
@@ -34,7 +34,6 @@ class OperatableState(PreemptableState):
         
         self.__execute = self.execute
         self.execute = self._operatable_execute
-        
         
     def _build_msg(self, prefix, msg):
         """

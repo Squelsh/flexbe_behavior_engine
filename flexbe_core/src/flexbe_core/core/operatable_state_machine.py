@@ -5,7 +5,7 @@ import smach
 
 from rospy.exceptions import ROSInterruptException
 
-from flexbe_core.core.preemptable_state_machine import PreemptableStateMachine
+from flexbe_core.core.semantic_properties_state_machine import SemanticPropertiesStateMachine
 from flexbe_core.core.lockable_state_machine import LockableStateMachine
 
 from smach.state_machine import StateMachine
@@ -18,7 +18,7 @@ from flexbe_core.core.loopback_state import LoopbackState
 from flexbe_core.state_logger import StateLogger
 
 
-class OperatableStateMachine(PreemptableStateMachine):
+class OperatableStateMachine(SemanticPropertiesStateMachine):
     """
     A state machine that can be operated.
     It synchronizes its current state with the mirror and supports some control mechanisms.

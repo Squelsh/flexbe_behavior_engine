@@ -32,7 +32,8 @@ class Behavior(object):
         self._debug = False
 
         self.requested_state_path = None
-        
+
+        self._semantic_properties = []
     
     # Please implement those:
     
@@ -47,7 +48,18 @@ class Behavior(object):
     
     
     # Use those if you need them:
-    
+
+    def collect_semantic_properties(self):
+        """
+        Concatenates the behavior's semantic properties with the semantic properties of all its state_machine states
+        @return: A dictionary of state names and a list of their semantic properties. Empty list if no props are available.
+        """
+        tmp_semantic_props = {}
+        if self._semantic_properties:
+            tmp_semantic_props[self.name] = self._semantic_properties
+        tmp_semantic_props.update(self._state_machine.collect_semantic_properties())
+        return tmp_semantic_props
+
     def add_parameter(self, name, default):
         """
         Adds a parameter to this behavior.

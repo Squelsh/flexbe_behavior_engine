@@ -302,6 +302,23 @@ class VigirBeOnboard(object):
            self._pub.publish(self.status_topic, BEStatus(behavior_id=msg.behavior_checksum, code=BEStatus.ERROR))
            return
 
+        # collect the required skills of the behavior (and its contained behaviors)
+        rospy.loginfo('The following semantic properties are given:')
+        self._semantic_properties = {}
+        try:
+            self._semantic_properties.update(be.collect_semantic_properties())
+            rospy.loginfo('Semantic properties of base behavior:%s' % str(self._semantic_properties))
+            tmp_semantic_properties = {}
+            for b in contain_list:
+                if b == behavior:
+                    tmp_semantic_properties.update(b.collect_semantic_properties())
+            rospy.loginfo('Semantic properties of contained behavior:%s' % str(tmp_semantic_properties))
+            self._semantic_properties.update(tmp_semantic_properties)
+        except Exception as e:
+            Logger.logerr('Failed to collect semantic properties:\n%s' % str(e))
+            self._pub.publish(self.status_topic, BEStatus(behavior_id=msg.behavior_checksum, code=BEStatus.ERROR))
+            return
+
         return be
 
 

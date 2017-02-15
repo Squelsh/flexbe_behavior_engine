@@ -5,11 +5,13 @@ from silent_state_machine import SilentStateMachine
 from jumpable_state_machine import JumpableStateMachine
 from operatable_state_machine import OperatableStateMachine
 from lockable_state_machine import LockableStateMachine
+from semantic_properties_state_machine import SemanticPropertiesStateMachine
 
 from concurrency_container import ConcurrencyContainer
 from priority_container import PriorityContainer
 
 from preemptable_state import PreemptableState
 from manually_transitionable_state import ManuallyTransitionableState
+from semantic_properties_state import SemanticPropertiesState
 from operatable_state import OperatableState
 from event_state import EventState
