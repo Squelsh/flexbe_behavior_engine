@@ -20,6 +20,8 @@ class SubscriberState(EventState):
 	-- blocking 	bool 		Blocks until a message is received.
 	-- clear 		bool 		Drops last message on this topic on enter
 								in order to only handle message received since this state is active.
+	-- field		string		Name of a field in the message data type which is returned.
+								Defaults to empty string. So the complete message is returned.
 
 	#> message		object		Latest message on the given topic of the respective type.
 
@@ -29,7 +31,7 @@ class SubscriberState(EventState):
 	'''
 
 
-	def __init__(self, topic, blocking = True, clear = False):
+	def __init__(self, topic, blocking = True, clear = False, field = ""):
 		'''
 		Constructor
 		'''
@@ -40,6 +42,7 @@ class SubscriberState(EventState):
 		self._blocking = blocking
 		self._clear = clear
 		self._connected = False
+		self.field = field
 
 		(msg_path, msg_topic, fn) = rostopic.get_topic_type(self._topic)
 
@@ -59,7 +62,14 @@ class SubscriberState(EventState):
 			return 'unavailable'
 
 		if self._sub.has_msg(self._topic) or not self._blocking:
-			userdata.message = self._sub.get_last_msg(self._topic)
+			if self.field != "":
+				try:
+					userdata.message = getattr(self._sub.get_last_msg(self._topic), self.field)
+				except Exception as e:
+					Logger.logwarn('Message does not contain a field named %s!\n' % self.field)
+					return 'unavailable'
+			else:
+				userdata.message = self._sub.get_last_msg(self._topic)
 			self._sub.remove_last_msg(self._topic)
 			return 'received'
 			
