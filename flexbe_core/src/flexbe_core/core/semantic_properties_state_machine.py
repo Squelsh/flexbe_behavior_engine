@@ -12,6 +12,17 @@ class SemanticPropertiesStateMachine(PreemptableStateMachine):
 
         super(SemanticPropertiesStateMachine, self).__init__(*args, **kwargs)
 
+    def get_semantic_properties(self):
+        """
+        @return: A dictionary of state names and a list of their semantic properties. Empty list if no props are available.
+        """
+        tmp_semantic_props = {}
+        for state in self._ordered_states:
+            if state.get_semantic_properties():
+                tmp_semantic_props[state.name] = state.get_semantic_properties()
+        return tmp_semantic_props
+
+
     def collect_semantic_properties(self):
         """
         @return: A dictionary of state names and a list of their semantic properties. Empty list if no props are available.
